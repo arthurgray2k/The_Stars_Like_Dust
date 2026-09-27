@@ -1,0 +1,15 @@
+# High Command Decree: Annexation of Widemos
+DISPATCH HCP-820-001
+ENCRYPTION: TYRANN-CIPHER-7
+ORIGIN: High-Command-Tyrann / Citadel-Prime
+TARGET: Sector-Governors-All
+STARDATE: 820-G.E.114
+PRIORITY: FLASH-URGENT
+STATUS: BROADCAST
+PAYLOAD:
+  EVENT: "The Rancher of Widemos has been condemned and executed under Article 14 for anti-Khanate treason."
+  INTEL: "Widemos livestock ranches and starports placed under immediate Tyranni imperial receivership."
+  DIRECTIVE: "All border patrols must detain the student heir Biron Farrill upon arrival from Earth."
+  WARNING: "Sympathizers of Widemos will face summary planetary bombardment."
+AUTHENTICATION: SIG-KHANATE-MIL-7701-ALPHA
+END_DISPATCH

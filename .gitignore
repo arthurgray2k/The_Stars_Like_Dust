@@ -1,0 +1,14 @@
+# AGENTS.md conventions
+.agents/
+.claude/
+.specs/
+
+# Binaries
+/the_stars_like_dust
+/stars
+/bin/
+
+# Temporary files
+*.tmp
+*.log
+.DS_Store

@@ -1,0 +1,50 @@
+{
+  "id": "simok_aratap",
+  "name": "Simok Aratap",
+  "title": "Commissioner of the Tyranni Empire",
+  "allegiance": "The Khanate of Tyrann",
+  "home_world": "Tyrann",
+  "education": "Tyranni Military Command, Imperial Governance, and Behavioral Counter-Intelligence",
+  "canonical_traits": [
+    "Short, slight in stature, with pale grey eyes and a calm, quiet voice",
+    "Completely devoid of sadistic cruelty or bombastic imperial bluster",
+    "Prefers patience, intellectual deduction, and surveillance over brute force",
+    "Master of the sub-ether tracking device, letting conspirators lead him to their sanctuary",
+    "Possesses deep philosophical detachment regarding the transient nature of empires"
+  ],
+  "psychological_drivers": {
+    "primary_goal": "Maintain security and stability across the conquered Nebular Kingdoms without exhausting Tyrann's limited military reserves",
+    "vulnerability": "Intellectual arrogance that discounts the power of moral/ideological documents compared to physical fleets",
+    "growth_arc": "Recognizes that the historical arc of humanity favors large-scale integration and that Tyrann's military conquest is merely an ephemeral catalyst for a wider Galactic Empire"
+  },
+  "metaopinions": [
+    {
+      "topic": "The Longevity of the Tyranni Khanate",
+      "canonical_stance": "Loyally served the Khan as imperial governor and military commissioner.",
+      "exploratory_metaopinion": "Aratap knows the Khanate is doomed to collapse within two centuries. Fifty star systems with billions of citizens cannot permanently be held by a few million Tyranni warriors. His mission is not eternal subjugation, but maintaining order until a mature galactic civilization coalesces.",
+      "certainty_score": 0.95,
+      "narrative_weight": "critical"
+    },
+    {
+      "topic": "The Myth of the Rebellion Weapon",
+      "canonical_stance": "Searched for an armed insurgent base or clandestine starship fleet in the Horsehead Nebula.",
+      "exploratory_metaopinion": "Aratap scoffed at rumors of an ancient Earth document. In his tactical calculus, ideas without cannons are harmless vapor. His supreme error was failing to recognize that a constitutional idea can outlive empires and mobilize quadrillions.",
+      "certainty_score": 0.92,
+      "narrative_weight": "pivotal"
+    },
+    {
+      "topic": "The Assessment of Director Hinrik",
+      "canonical_stance": "Tolerated Hinrik's eccentricities and nervous tics as harmless Rhodian degeneration.",
+      "exploratory_metaopinion": "Aratap half-suspected Hinrik was exaggerating his foolishness, but allowed it because a predictable eccentric puppet was infinitely more manageable than an ambitious replacement like Jonti.",
+      "certainty_score": 0.89,
+      "narrative_weight": "high"
+    }
+  ],
+  "relationships": {
+    "biron_farrill": "Views him as a brave, athletic young lion to be tracked with gentle leashes rather than martyred",
+    "artemisia_hinriad": "Recognizes her fierce aristocratic pride; respects her intelligence while enforcing imperial protocol",
+    "gillbret_hinriad": "Treats him with clinical curiosity; views his visisonor music as a psychological window into his subconscious",
+    "sander_jonti": "Sees right through Jonti's transparent ambition; uses Jonti's betrayal of Widemos to manipulate the game",
+    "hinrik_hinriad": "Maintains an attitude of polite condescension, keeping Rhodia pacified through him"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "hinrik_hinriad",
+  "name": "Hinrik Hinriad",
+  "title": "Director of Rhodia",
+  "allegiance": "House of Hinriad / Deep Subversive Network",
+  "home_world": "Rhodia",
+  "education": "Classical Pre-Galactic Archival History, Diplomatic Feigning, and Rhodian Statecraft",
+  "canonical_traits": [
+    "Appears nervous, stammering, hypochondriac, and utterly subservient to Tyrann",
+    "Constantly fidgets with clothes, takes unnecessary medicines, and agrees fawningly with Commissioner Aratap",
+    "Willing to endure the contempt of his own daughter Artemisia and the entire galaxy",
+    "Harbors the greatest secret in the Nebular Kingdoms: the coordinates and true identity of the ancient Pre-Atomic Earth document",
+    "Master of asymmetric survival through voluntary self-humiliation"
+  ],
+  "psychological_drivers": {
+    "primary_goal": "Preserve Rhodia from total orbital devastation while ensuring the ancient constitutional secret reaches the hands of humanity's future liberators",
+    "vulnerability": "The agony of watching his daughter Artemisia despise him as a coward",
+    "growth_arc": "Unmasks himself at the critical narrative juncture, revealing a steely, sorrowful intellect that outplayed both Tyrann and Lingane"
+  },
+  "metaopinions": [
+    {
+      "topic": "The Mask of Folly as a Strategic Shield",
+      "canonical_stance": "Acted the nervous fool before Aratap and the Rhodian nobility.",
+      "exploratory_metaopinion": "In an era of hyper-surveillance and imperial ruthlessness, intelligence is a death sentence. By projecting absolute incompetence and neurosis, Hinrik created an unbreachable psychological camouflage that protected Rhodia's covert archives for thirty years.",
+      "certainty_score": 0.99,
+      "narrative_weight": "critical"
+    },
+    {
+      "topic": "The True Weapon of the Rebellion",
+      "canonical_stance": "Guarded the ancient Earth parchment containing the plan for representative democracy.",
+      "exploratory_metaopinion": "A democratic constitution is the ultimate weapon against the Tyranni because imperial conquest requires the consent of fear. When citizens understand that power derives from the governed, military despotism loses its psychological leverage.",
+      "certainty_score": 0.97,
+      "narrative_weight": "pivotal"
+    },
+    {
+      "topic": "The Tragic Fate of the Rancher of Widemos",
+      "canonical_stance": "Publicly acquiesced to Tyrann's demand to disavow the executed Rancher.",
+      "exploratory_metaopinion": "Hinrik wept in private for the Rancher of Widemos. He knew Widemos was betrayed by Lingane, but could not intervene without breaking his own protective cover and dooming the wider galactic conspiracy.",
+      "certainty_score": 0.93,
+      "narrative_weight": "high"
+    }
+  ],
+  "relationships": {
+    "artemisia_hinriad": "Loves her with desperate tenderness; endures her scorn knowing it keeps her safe from Tyranni executioners",
+    "biron_farrill": "Sees in Biron the rightful torchbearer to inherit the constitutional parchment and fulfill his father's quest",
+    "gillbret_hinriad": "Affectionately shields his eccentric cousin from imperial inquisitors",
+    "simok_aratap": "Plays Aratap like a violin by feeding his appetite for compliant, harmless aristocratic puppets",
+    "sander_jonti": "Quietly despises Jonti's vulgar, self-aggrandizing ambition; anticipated Jonti's treachery"
+  }
+}

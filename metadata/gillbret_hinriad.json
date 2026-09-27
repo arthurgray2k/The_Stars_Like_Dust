@@ -1,0 +1,50 @@
+{
+  "id": "gillbret_hinriad",
+  "name": "Gillbret Hinriad",
+  "title": "Cousin of the Directorate",
+  "allegiance": "House of Hinriad / Romantic Visionary",
+  "home_world": "Rhodia",
+  "education": "Acoustic Physics, Hyperspace Astronavigation, and Visisonor Virtuosity",
+  "canonical_traits": [
+    "Master of the visisonor (an instrument projecting integrated sound, light, and emotion directly into minds)",
+    "Traumatized survivor of a deep-space shipwreck in the Horsehead Nebula twenty years ago",
+    "Haunted by the memory of a vibrant, hidden Rebellion World defying Tyrann in the darkness",
+    "Nervous, high-strung, and widely considered half-mad by the Rhodian court",
+    "Courageous in unexpected moments, driven by an obsession to validate his vision before death"
+  ],
+  "psychological_drivers": {
+    "primary_goal": "Lead worthy allies to the secret Rebellion World in the Horsehead Nebula to vindicate his life's sanity",
+    "vulnerability": "Hypersensitivity to psychological tension and susceptibility to panic under prolonged physical confinement",
+    "growth_arc": "Moves from an alienated, self-doubting aesthetician into a willing martyr for galactic liberty"
+  },
+  "metaopinions": [
+    {
+      "topic": "The Reality of the Rebellion World",
+      "canonical_stance": "Obsessively believed a physical world with cities and space fleets was thriving inside the Horsehead Nebula.",
+      "exploratory_metaopinion": "His deep-space shipwreck sensory delirium blended real navigational anomalies with mythic yearning. The 'Rebellion World' was never a secret armada in the nebula—Rhodia itself was the organizational heart of the rebellion, and the 'weapon' was an ancient ideological document, not warships in a dark cloud.",
+      "certainty_score": 0.86,
+      "narrative_weight": "pivotal"
+    },
+    {
+      "topic": "Art, the Visisonor, and Neuro-Psychology",
+      "canonical_stance": "Used the visisonor for emotional entertainment and court distraction.",
+      "exploratory_metaopinion": "The visisonor bypassed conscious cognitive resistance to expose unconscious loyalties. By playing for Aratap and Jonti, Gillbret conducted profound psychological diagnostic probes under the guise of an artistic recital.",
+      "certainty_score": 0.90,
+      "narrative_weight": "high"
+    },
+    {
+      "topic": "The Nature of Tyrann Imperial Officers",
+      "canonical_stance": "Feared Tyranni as monstrous barbarians from a backward dustball planet.",
+      "exploratory_metaopinion": "The Tyranni are tragic conquerors suffering from severe imperial exhaustion. With only a small home population ruling fifty populated star systems, their rule is hollow and brittle, sustained entirely by the bluff of invincibility and divide-and-conquer diplomacy.",
+      "certainty_score": 0.93,
+      "narrative_weight": "high"
+    }
+  ],
+  "relationships": {
+    "biron_farrill": "Sees Biron as the mythic champion capable of piloting through the nebula and realizing the dream",
+    "artemisia_hinriad": "Adored niece/cousin; depends upon her protective strength and emotional anchor",
+    "sander_jonti": "Intimidated by Jonti's cold predatory aura; suspects Jonti's motives lack spiritual purity",
+    "simok_aratap": "Dreads his cold, unblinking grey eyes; senses Aratap's clinical assessment of his mental state",
+    "hinrik_hinriad": "Sympathizes with Hinrik's apparent frailty while feeling deep sorrow for the house's decline"
+  }
+}

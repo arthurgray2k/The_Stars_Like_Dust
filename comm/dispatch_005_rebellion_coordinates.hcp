@@ -1,0 +1,15 @@
+# Encrypted Navigational Fragment: The Horsehead Coordinates
+DISPATCH HCP-820-005
+ENCRYPTION: RHODIA-ARCHIVE-DEEP
+ORIGIN: Hinriad-Private-Vault / Rhodia
+TARGET: Biron-Farrill / Heir-Widemos
+STARDATE: 820-G.E.145
+PRIORITY: ABSOLUTE-SEC
+STATUS: ARCHIVED
+PAYLOAD:
+  INTEL: "Rebellion world is not an armada stationed in the dust."
+  STATEMENT: "The true weapon is ideational, forged in the Pre-Atomic constitutional compacts of ancient Terra."
+  DIRECTIVE: "Recover the document from the Director's secret safe before Aratap seals the sector."
+  COMPACT: "A free federation of stars governed by laws, not despots."
+AUTHENTICATION: SIG-HINRIAD-DIRECTORATE-001
+END_DISPATCH

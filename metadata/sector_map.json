@@ -1,0 +1,68 @@
+{
+  "galaxy_epoch": "Galactic Era (Pre-Foundation / Pre-Trantor Ascendancy)",
+  "region": "The Nebular Kingdoms & Fifty Conquered Worlds",
+  "key_locations": [
+    {
+      "id": "earth",
+      "name": "Earth",
+      "type": "Radioactive Cradle World",
+      "sector": "Sector Solar-0",
+      "description": "Ancient humanity's origin planet, mostly radioactive wasteland with patches of habitable land, home to the University of Earth and forgotten archives of pre-atomic history."
+    },
+    {
+      "id": "rhodia",
+      "name": "Rhodia",
+      "type": "Directorate Capital World",
+      "sector": "Nebular Sector 1",
+      "description": "Wealthy, civilized agricultural and cultural center ruled by the Hinriad dynasty under Tyranni surveillance. Heart of covert archival preservation."
+    },
+    {
+      "id": "lingane",
+      "name": "Lingane",
+      "type": "Militant Merchant Autarchy",
+      "sector": "Nebular Sector 3",
+      "description": "Technologically advanced kingdom on the rim of the Horsehead Nebula, ruled by the Autarch Sander Jonti. Base of swift pirate cruisers and double-dealing conspiracies."
+    },
+    {
+      "id": "widemos",
+      "name": "Widemos",
+      "type": "Ranching Stronghold",
+      "sector": "Nebular Sector 4",
+      "description": "Fierce pastoral world governed by the Ranchers of Widemos. Its leader was executed by Tyrann for treason, leaving Biron as the dispossessed heir."
+    },
+    {
+      "id": "tyrann",
+      "name": "Tyrann",
+      "type": "Imperial Conqueror Fortress World",
+      "sector": "Tyrannic Core",
+      "description": "Resource-poor, harsh desert planet whose Spartan warrior-caste conquered fifty neighboring kingdoms fifty years prior through military discipline and speed."
+    },
+    {
+      "id": "horsehead_nebula",
+      "name": "The Horsehead Nebula",
+      "type": "Dark Molecular Cloud & Gravitational Maze",
+      "sector": "Deep Nebular Void",
+      "description": "A vast, impenetrable interstellar dust cloud where stellar radiation is veiled. Site of Gillbret's ancient shipwreck and the rumored coordinates of the Rebellion World."
+    }
+  ],
+  "ships": [
+    {
+      "id": "remembrance",
+      "name": "The Remembrance (formerly The Farrell)",
+      "class": "Rhodian Fast Cruiser / Tyranni Prototype",
+      "description": "The vessel seized by Biron, Artemisia, and Gillbret during their escape from Rhodia. Secretly bugged with Aratap's sub-ether tracking device."
+    },
+    {
+      "id": "lingane_flagship",
+      "name": "The Autarch's Pride",
+      "class": "Armed Expeditionary Flagship",
+      "description": "Sander Jonti's personal warship, equipped with advanced long-range hyper-radios and heavy blaster turrets."
+    },
+    {
+      "id": "tyrann_dreadnought",
+      "name": "The Khan's Vengeance",
+      "class": "Imperial Battlecruiser",
+      "description": "Commissioner Simok Aratap's command vessel, capable of hyperspace micro-jumps and orbital decimation."
+    }
+  ]
+}

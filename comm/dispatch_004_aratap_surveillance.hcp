@@ -1,0 +1,15 @@
+# Imperial Surveillance Log: The Sub-Ether Bug
+DISPATCH HCP-820-004
+ENCRYPTION: TYRANN-CIPHER-7
+ORIGIN: Commissioner-Simok-Aratap / Flagship-Core
+TARGET: Imperial-Security-Council
+STARDATE: 820-G.E.138
+PRIORITY: STRATEGIC
+STATUS: EYES-ONLY
+PAYLOAD:
+  EVENT: "Vessel Remembrance successfully breached Rhodia planetary blockade."
+  INTEL: "Miniaturized sub-ether transponder activated on auxiliary engine hull."
+  DIRECTIVE: "Do not fire upon Remembrance. Allow conspirators unhindered passage into the Horsehead Nebula."
+  INTEL: "Farrill and the Hinriad woman will lead our fleet directly to the hidden rebellion base."
+AUTHENTICATION: SIG-ARATAP-COMMISSIONER-991
+END_DISPATCH

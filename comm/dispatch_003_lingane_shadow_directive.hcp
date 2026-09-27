@@ -1,0 +1,15 @@
+# Autarch Private Dispatch: Steering the Widemos Heir
+DISPATCH HCP-820-003
+ENCRYPTION: AUTARCH-QUANTUM-LOCK
+ORIGIN: Lingane-Chancellery / Autarch-Personal
+TARGET: Field-Operative-Tau
+STARDATE: 820-G.E.122
+PRIORITY: ULTRA-SEC
+STATUS: CLASSIFIED
+PAYLOAD:
+  EVENT: "Biron Farrill safely guided toward Rhodia court."
+  INTEL: "Hinrik's cowardice will push Farrill into the arms of the conspirators."
+  DIRECTIVE: "Ensure Farrill acquires ship Remembrance without realizing Lingane arranged the fuel codes."
+  DIRECTIVE: "Monitor Gillbret Hinriad for any recurrence of the Horsehead Nebula coordinates."
+AUTHENTICATION: SIG-AUTARCH-JONTI-PRIME
+END_DISPATCH

@@ -1,0 +1,50 @@
+{
+  "id": "biron_farrill",
+  "name": "Biron Farrill",
+  "title": "Heir of Widemos",
+  "allegiance": "Independent / Anti-Tyrann",
+  "home_world": "Widemos (Nebular Sector 4)",
+  "education": "University of Earth (Space Chemistry and Administration)",
+  "canonical_traits": [
+    "Physically athletic and decisive under sudden peril",
+    "Deeply loyal to his father's memory and the honor of Widemos",
+    "Naive in galactic political intrigue, expecting honorable conduct",
+    "Distrustful of Tyrann conquerors who executed his father for treason",
+    "Drawn to Artemisia Hinriad despite suspicion of Rhodian court motives"
+  ],
+  "psychological_drivers": {
+    "primary_goal": "Avenge his father and locate the legendary Rebellion World to overthrow Tyrann",
+    "vulnerability": "Impulsive trust in charismatic fellow rebels like Sander Jonti",
+    "growth_arc": "Transforms from an aggrieved son seeking personal retribution into a statesman recognizing that freedom requires structural constitutional law, not merely military vengeance"
+  },
+  "metaopinions": [
+    {
+      "topic": "Tyranni Hegemony vs Feudal Fragmentation",
+      "canonical_stance": "Viewed the Khan of Tyrann as a brutal tyrant who suffocated fifty free nebular kingdoms.",
+      "exploratory_metaopinion": "The fifty nebular kingdoms were themselves petty, decadent feudal oligarchies perpetually warring amongst themselves. Tyrann's conquest was only possible because the kingdoms lacked solidarity. Overthrowing Tyrann without establishing a federated constitutional framework will merely restore fifty petty tyrants.",
+      "certainty_score": 0.88,
+      "narrative_weight": "high"
+    },
+    {
+      "topic": "The Betrayal of Widemos",
+      "canonical_stance": "Believed Rhodia or an unknown spy betrayed the Rancher of Widemos.",
+      "exploratory_metaopinion": "The Rancher's execution was engineered by Sander Jonti to remove Widemos as a competing leader of the rebellion. Lingane sought not liberation, but supreme regional dominance disguised as rebellion.",
+      "certainty_score": 0.94,
+      "narrative_weight": "critical"
+    },
+    {
+      "topic": "The Nature of the Ultimate Weapon",
+      "canonical_stance": "Expected a physical super-weapon, such as an antimatter planet-buster or hidden armada.",
+      "exploratory_metaopinion": "Physical armadas inevitably rot or turn against their makers. A constitutional document from ancient Pre-Atomic Earth outlining self-limiting representative governance is far more dangerous to Tyrann because it dismantles the ideological foundation of aristocratic conquest.",
+      "certainty_score": 0.92,
+      "narrative_weight": "pivotal"
+    }
+  ],
+  "relationships": {
+    "artemisia_hinriad": "Romantic tension; respects her defiance while fearing Rhodian duplicity",
+    "gillbret_hinriad": "Finds his eccentric visions erratic but recognizes genuine intuitive genius",
+    "sander_jonti": "Initially viewed as mentor and savior; growing wariness of his Machiavellian vanity",
+    "simok_aratap": "Feared intellectual adversary; respects his calculating rationality",
+    "hinrik_hinriad": "Mistakenly views him as a trembling coward; fails to perceive Hinrik's sacrificial mask"
+  }
+}

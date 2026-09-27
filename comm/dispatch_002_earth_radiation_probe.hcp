@@ -1,0 +1,15 @@
+# Subversive Alert: Assassination Attempt on Earth
+DISPATCH HCP-820-002
+ENCRYPTION: LINGANE-SHADOW
+ORIGIN: Subversive-Cell-Terra / University-Earth
+TARGET: Biron-Farrill / Dormitory-B-8
+STARDATE: 820-G.E.116
+PRIORITY: URGENT
+STATUS: INTERCEPTED
+PAYLOAD:
+  EVENT: "Radiation capsule planted inside room ventilation shaft."
+  INTEL: "Local Earth police cooperating with Tyranni covert intelligence."
+  DIRECTIVE: "Evacuate Earth immediately via non-scheduled freighter to Rhodia."
+  COMPACT: "Seek out the Hinriad Directorate; remember Widemos honor."
+AUTHENTICATION: SIG-LINGANE-AGENT-VERITAS
+END_DISPATCH

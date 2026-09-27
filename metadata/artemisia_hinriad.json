@@ -1,0 +1,50 @@
+{
+  "id": "artemisia_hinriad",
+  "name": "Artemisia Hinriad",
+  "title": "Lady of Rhodia",
+  "allegiance": "House of Hinriad / Covert Subversive",
+  "home_world": "Rhodia (Directorate Capital)",
+  "education": "Rhodian Imperial Court Academy (Statecraft, Navigation, and Visisonor Arts)",
+  "canonical_traits": [
+    "Fiercely proud, sharp-tongued, and aristocratic in manner",
+    "Refuses to be traded as a political bargaining chip in an arranged marriage to a decrepit Tyranni noble",
+    "Capable astronavigator and quick under starship combat emergencies",
+    "Protective of her cousin Gillbret despite his erratic behavior",
+    "Torn between familial loyalty to Rhodia and the imperative to resist Tyranni subjugation"
+  ],
+  "psychological_drivers": {
+    "primary_goal": "Escape political enslavement by Tyrann and secure Rhodian autonomy without provoking total planetary destruction",
+    "vulnerability": "Arrogant pride that alienates potential allies and obscures deeper court machinations",
+    "growth_arc": "Moves beyond dynastic pride to embrace egalitarian resistance, recognizing that her father's humiliation is a calculated shield rather than cowardice"
+  },
+  "metaopinions": [
+    {
+      "topic": "Dynastic Sacrifice vs Open Rebellion",
+      "canonical_stance": "Despised her father Hinrik's humiliating subservience to Commissioner Aratap.",
+      "exploratory_metaopinion": "Open defiance by Rhodia would have triggered orbital bombardment within 48 hours. Hinrik's play-acting idiocy was an agonizing act of supreme courage, absorbing personal contempt to maintain Rhodia as the hidden logistical hub of the future revolt.",
+      "certainty_score": 0.91,
+      "narrative_weight": "critical"
+    },
+    {
+      "topic": "The Role of Women in Feudal Space Empires",
+      "canonical_stance": "Objected to being married off to an imperial overlord for political appeasement.",
+      "exploratory_metaopinion": "The Nebular aristocracy views women as dynastic chattel because its politics are medieval despite faster-than-light hyperdrive technology. True galactic revolution must dismantle feudal social hierarchies alongside military occupation.",
+      "certainty_score": 0.89,
+      "narrative_weight": "high"
+    },
+    {
+      "topic": "The Lingane Alliance",
+      "canonical_stance": "Distrusted Sander Jonti's smooth vanity and excessive charm from the start.",
+      "exploratory_metaopinion": "Jonti's Autarchy represents an even more dangerous fascism than Tyrann. The Tyranni are blunt, bureaucratic conquerors whose limits are predictable; Jonti is a demagogue drunk on ideological messianism.",
+      "certainty_score": 0.95,
+      "narrative_weight": "high"
+    }
+  ],
+  "relationships": {
+    "biron_farrill": "Deepening bond; challenged by his earnestness and protective instinct, which she matches with strategic intellect",
+    "gillbret_hinriad": "Cherished elder cousin; indulges his eccentricities while recognizing the truth in his trauma",
+    "hinrik_hinriad": "Complex grief; initially humiliated by his apparent weakness, transitioning to reverence upon learning the truth",
+    "simok_aratap": "Cold imperial predator whom she treats with guarded diplomatic disdain",
+    "sander_jonti": "Instinctive revulsion; detects predatory narcissism behind his rebel rhetoric"
+  }
+}

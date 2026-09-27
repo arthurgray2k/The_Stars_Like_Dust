@@ -1,0 +1,50 @@
+{
+  "id": "sander_jonti",
+  "name": "Sander Jonti",
+  "title": "Autarch of Lingane",
+  "allegiance": "Autarchy of Lingane / Personal Ambition",
+  "home_world": "Lingane",
+  "education": "Imperial Realpolitik, Naval Tactics, and Subversive Intelligence",
+  "canonical_traits": [
+    "Cultured, handsome, eloquent, and commanding presence",
+    "Presents himself as the ardent champion and financial patron of anti-Tyrann rebels",
+    "Ruthlessly pragmatic, eliminating allies the moment they rival his political supremacy",
+    "Secretly orchestrated the arrest and execution of the Rancher of Widemos",
+    "Plots to supplant Tyranni rule with his own autocratic empire over the Nebular Kingdoms"
+  ],
+  "psychological_drivers": {
+    "primary_goal": "Seize the secret rebellion coordinates, destroy the Tyrann fleet, and crown himself Emperor of the Nebular Kingdoms",
+    "vulnerability": "Arrogant overconfidence in his ability to deceive everyone simultaneously",
+    "growth_arc": "Does not achieve moral redemption; his trajectory is a descent into paranoid fury as his duplicity is methodically exposed"
+  },
+  "metaopinions": [
+    {
+      "topic": "The Inevitability of Autocracy",
+      "canonical_stance": "Argued that the Nebular Kingdoms need a strong unified master rather than democratic chaos.",
+      "exploratory_metaopinion": "Jonti genuinely believes representative democracy is an infantile delusion that collapsed Earth into radioactive ruin. In his world-view, an enlightened, ruthless autarch is the only barrier against galactic anarchy.",
+      "certainty_score": 0.96,
+      "narrative_weight": "critical"
+    },
+    {
+      "topic": "The Rancher of Widemos as a Threat",
+      "canonical_stance": "Claimed grief over the Rancher's execution while blaming Rhodian betrayal.",
+      "exploratory_metaopinion": "The Rancher was too charismatic, honorable, and beloved across fifty worlds. Had the rebellion succeeded under Widemos, Jonti would have remained a second-tier planetary lord. Removing Widemos was a calculated necessity for Jonti's ascension.",
+      "certainty_score": 0.98,
+      "narrative_weight": "critical"
+    },
+    {
+      "topic": "Commissioner Aratap and Tyrann Imperialism",
+      "canonical_stance": "Publicly denounced Tyranni as barbarians while quietly negotiating back-channel concessions.",
+      "exploratory_metaopinion": "Jonti respects Aratap more than any other person in the galaxy. He perceives Aratap as the only fellow adult playing real chess on a board full of aristocratic children.",
+      "certainty_score": 0.91,
+      "narrative_weight": "high"
+    }
+  ],
+  "relationships": {
+    "biron_farrill": "Regarded as a useful pawn to be manipulated, directed at Rhodia, and disposed of when expendable",
+    "simok_aratap": "Dreaded nemesis and intellectual peer; a lethal game of mutual entrapment",
+    "artemisia_hinriad": "Desires her both as a dynastic trophy to legitimize his claim over Rhodia and for her sharp mind",
+    "gillbret_hinriad": "Tolerates him solely as an astronavigational key to unlock the Horsehead Nebula coordinates",
+    "hinrik_hinriad": "Disdains him as an impotent puppet, completely underestimating the Director"
+  }
+}
