@@ -101,7 +101,40 @@ To introduce probabilistic variability into a character's choices rather than pu
 
 ---
 
-## 5. Database Persistence & Inspection
+## 5. Multi-Agent Sub-Agent Delegation & Dynamic HCP Standoffs (`--subagents`)
+
+You can delegate secondary cast members to autonomous sub-agents with randomized or archetype-tailored model tiers and cognitive effort levels:
+
+```bash
+# Run with archetype sub-agents (e.g. Aratap on 'pro', Jonti on 'flash', Hinrik on 'flash_lite')
+./stars --pov biron_farrill --subagents archetype
+
+# Run with randomized model allocations across secondary cast
+./stars --pov biron_farrill --subagents random --seed 1234
+
+# Combine tactical stance, temperature, and sub-agents
+./stars --pov biron_farrill --stance aggressive --temp 0.3 --subagents archetype
+```
+
+### Delegation Modes
+- `off` (default): Uses local evaluation heuristics for secondary characters.
+- `archetype`: Assigns canon-tailored LLM tiers and cognitive effort:
+  - **Commissioner Simok Aratap**: Model `pro` | Effort `high` (*Tyranni Chief Inquisitor*)
+  - **Autarch Sander Jonti**: Model `flash` | Effort `medium` (*Linganian Hegemonic Conspirator*)
+  - **Lady Artemisia Hinriad**: Model `flash` | Effort `high` (*Rhodian Defiant Diplomat*)
+  - **Director Hinrik Hinriad**: Model `flash_lite` | Effort `medium` (*Archival Guardian*)
+  - **Gillbret Hinriad**: Model `flash_lite` | Effort `fast` (*Rebel Astrogator*)
+- `random`: Stochastically distributes model tiers (`flash_lite`, `flash`, `pro`) and effort levels across characters.
+
+### Dynamic HCP Standoffs
+During each scene encounter:
+1. An outbound transmission is logged in `comm/dispatch_<session>_t<N>_outbound.hcp`.
+2. The opposing sub-agent synthesizes an authentic counter-dispatch in `comm/dispatch_<session>_t<N>_counter.hcp`.
+3. Strict 1-round ping-pong ensures zero recursive loops and guarantees API plan token conservation.
+
+---
+
+## 6. Database Persistence & Inspection
 
 The simulation state is automatically persisted in `data/stars_universe.db`.
 
@@ -118,7 +151,7 @@ The embedded database employs WAL mode and automatic compaction (`PRAGMA vacuum`
 
 ---
 
-## 4. Hyper-Comm Protocol (HCP) DSL
+## 7. Hyper-Comm Protocol (HCP) DSL
 
 Subspace transmissions in `comm/` follow the HCP syntax:
 

@@ -3,6 +3,7 @@ package engine
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/arthurgray2k/The_Stars_Like_Dust/internal/comm"
@@ -12,11 +13,12 @@ import (
 
 // SimulationOptions defines runtime controls for stance, temperature stochasticity, and seeding.
 type SimulationOptions struct {
-	POV         string  `json:"pov"`
-	Stance      string  `json:"stance"`      // balanced, aggressive, covert, diplomatic, inquisitive
-	Temperature float64 `json:"temperature"` // 0.0 = deterministic; >0.0 = stochastic sampling
-	Seed        int64   `json:"seed"`        // 0 = auto-generate time seed
-	SessionID   string  `json:"session_id"`
+	POV          string  `json:"pov"`
+	Stance       string  `json:"stance"`        // balanced, aggressive, covert, diplomatic, inquisitive
+	Temperature  float64 `json:"temperature"`   // 0.0 = deterministic; >0.0 = stochastic sampling
+	Seed         int64   `json:"seed"`          // 0 = auto-generate time seed
+	SubagentMode string  `json:"subagent_mode"` // "off", "archetype", "random"
+	SessionID    string  `json:"session_id"`
 }
 
 // Engine orchestrates episodic narrative execution.
@@ -74,11 +76,12 @@ func (e *Engine) SyncMetadataToDatabase() error {
 // RunEpisode executes an episodic simulation with default balanced deterministic settings.
 func (e *Engine) RunEpisode(pov string, sessionID string) (*GameState, error) {
 	return e.RunEpisodeWithOptions(SimulationOptions{
-		POV:         pov,
-		Stance:      "balanced",
-		Temperature: 0.0,
-		Seed:        1,
-		SessionID:   sessionID,
+		POV:          pov,
+		Stance:       "balanced",
+		Temperature:  0.0,
+		Seed:         1,
+		SubagentMode: "off",
+		SessionID:    sessionID,
 	})
 }
 
@@ -105,6 +108,14 @@ func (e *Engine) RunEpisodeWithOptions(opts SimulationOptions) (*GameState, erro
 		stance = "balanced"
 	}
 
+	subagentMode := strings.ToLower(strings.TrimSpace(opts.SubagentMode))
+	if subagentMode == "true" || subagentMode == "auto" {
+		subagentMode = "archetype"
+	}
+	if subagentMode == "" {
+		subagentMode = "off"
+	}
+
 	seed := opts.Seed
 	if seed == 0 {
 		seed = time.Now().UnixNano()
@@ -124,6 +135,7 @@ func (e *Engine) RunEpisodeWithOptions(opts SimulationOptions) (*GameState, erro
 		Stance:         stance,
 		Temperature:    opts.Temperature,
 		Seed:           seed,
+		SubagentMode:   subagentMode,
 		MaxTurns:       len(scenes),
 		Location:       "Starting Orbit",
 		ActiveShip:     "The Remembrance",
@@ -134,6 +146,10 @@ func (e *Engine) RunEpisodeWithOptions(opts SimulationOptions) (*GameState, erro
 
 	for _, p := range e.PersonaMgr.List() {
 		state.Characters[p.ID] = p
+	}
+
+	if subagentMode != "off" {
+		state.Subagents = InitSubagentCast(subagentMode, seed, state.Characters, pov)
 	}
 
 	dispatches, _ := e.CommMgr.LoadAll()
@@ -176,6 +192,16 @@ func (e *Engine) RunEpisodeWithOptions(opts SimulationOptions) (*GameState, erro
 			state.BlastersEngaged = true
 		}
 
+		outcomeText := fmt.Sprintf("%s resolved scene '%s' (Choice: %s)", actor.Name, scene.Title, eval.ChosenAction.ID)
+		var standoff *SubagentStandoff
+		if subagentMode != "off" && len(state.Subagents) > 0 {
+			standoff = ExecuteSubagentEncounter(turnIndex, scene, actor, eval.ChosenAction, state.Subagents, state.Characters, e.CommMgr, sessionID)
+			if standoff != nil {
+				outcomeText = fmt.Sprintf("%s resolved '%s' (Choice: %s) -> Inter-Agent Standoff with %s [%s/%s]: %s",
+					actor.Name, scene.Title, eval.ChosenAction.ID, standoff.TargetActorName, standoff.SubagentProfile.Model, standoff.SubagentProfile.Effort, standoff.TacticalStroke)
+			}
+		}
+
 		// Record chosen turn into permanent database table
 		turnRec := storage.TurnRecord{
 			SessionID:    sessionID,
@@ -184,7 +210,7 @@ func (e *Engine) RunEpisodeWithOptions(opts SimulationOptions) (*GameState, erro
 			Location:     scene.Location,
 			ActionChosen: eval.ChosenAction.Description,
 			Dialogue:     eval.ChosenAction.DialoguePrompt,
-			Outcome:      fmt.Sprintf("%s resolved scene '%s' (Choice: %s)", actor.Name, scene.Title, eval.ChosenAction.ID),
+			Outcome:      outcomeText,
 		}
 		if err := e.Store.RecordTurn(turnRec); err != nil {
 			return nil, fmt.Errorf("failed recording turn %d: %w", turnIndex, err)
@@ -193,14 +219,15 @@ func (e *Engine) RunEpisodeWithOptions(opts SimulationOptions) (*GameState, erro
 		_ = e.Store.ClearTempEvaluations(sessionID)
 
 		result := TurnResult{
-			TurnIndex:      turnIndex,
-			ActorID:        actor.ID,
-			ActorName:      actor.Name,
-			Location:       scene.Location,
-			Decision:       eval,
-			NarrativeEvent: contextDescription,
-			Dialogue:       eval.ChosenAction.DialoguePrompt,
-			Outcome:        turnRec.Outcome,
+			TurnIndex:        turnIndex,
+			ActorID:          actor.ID,
+			ActorName:        actor.Name,
+			Location:         scene.Location,
+			Decision:         eval,
+			NarrativeEvent:   contextDescription,
+			Dialogue:         eval.ChosenAction.DialoguePrompt,
+			Outcome:          turnRec.Outcome,
+			SubagentStandoff: standoff,
 		}
 		state.TurnHistory = append(state.TurnHistory, result)
 	}
@@ -216,6 +243,10 @@ func (e *Engine) RunEpisodeWithOptions(opts SimulationOptions) (*GameState, erro
 	} else {
 		state.EndingBranch = "Canonical Proclamation of the Free Federation"
 		finalOutcome = fmt.Sprintf("Episode successfully resolved through the decisive agency of %s across %d narrative turns under %s stance.", povPersona.Name, len(scenes), stance)
+	}
+
+	if subagentMode != "off" && len(state.Subagents) > 0 {
+		finalOutcome = fmt.Sprintf("%s (Sub-Agent Standoffs active: %d secondary actors managed under %s mode)", finalOutcome, len(state.Subagents), subagentMode)
 	}
 
 	if err := e.Store.CompleteSession(sessionID, finalOutcome); err != nil {

@@ -29,6 +29,9 @@ func GenerateA4Summary(state *engine.GameState, p *persona.Persona) *A4Report {
 	sb.WriteString(fmt.Sprintf("ALLEGIANCE: %s | HOME WORLD: %s\n", p.Allegiance, p.HomeWorld))
 	sb.WriteString(fmt.Sprintf("NARRATIVE ARC: %s\n", state.EpisodeTitle))
 	sb.WriteString(fmt.Sprintf("TACTICAL STANCE: %-12s | TEMPERATURE: %.2f | PRNG SEED: %d\n", strings.ToUpper(state.Stance), state.Temperature, state.Seed))
+	if state.SubagentMode != "" && state.SubagentMode != "off" {
+		sb.WriteString(fmt.Sprintf("SUB-AGENT ORCHESTRATION: %s (%d Secondary Characters Assigned)\n", strings.ToUpper(state.SubagentMode), len(state.Subagents)))
+	}
 	sb.WriteString(fmt.Sprintf("DIVERGENT BRANCH RESOLUTION: %s\n", state.EndingBranch))
 	sb.WriteString(fmt.Sprintf("TOTAL TURNS EXECUTED: %d / %d (Bounded Episodic Run)\n\n", len(state.TurnHistory), state.MaxTurns))
 
@@ -52,6 +55,14 @@ func GenerateA4Summary(state *engine.GameState, p *persona.Persona) *A4Report {
 			sb.WriteString(fmt.Sprintf("Spoken:   \"%s\"\n", t.Dialogue))
 		}
 		sb.WriteString(fmt.Sprintf("Risk:     %s\n", t.Decision.RiskAssessment))
+		if t.SubagentStandoff != nil {
+			sb.WriteString(fmt.Sprintf("↳ Standoff: %s [Sub-Agent Model: %s | Effort: %s]\n",
+				t.SubagentStandoff.TargetActorName, t.SubagentStandoff.SubagentProfile.Model, t.SubagentStandoff.SubagentProfile.Effort))
+			sb.WriteString(fmt.Sprintf("  Protagonist Transmission: %s\n", t.SubagentStandoff.OutboundHCPFile))
+			sb.WriteString(fmt.Sprintf("  NPC Counter-Dispatch:     %s\n", t.SubagentStandoff.CounterHCPFile))
+			sb.WriteString(fmt.Sprintf("  NPC Counter-Dialogue:     \"%s\"\n", t.SubagentStandoff.CounterDialogue))
+			sb.WriteString(fmt.Sprintf("  Tactical Repercussion:    %s\n", t.SubagentStandoff.TacticalStroke))
+		}
 		sb.WriteString(fmt.Sprintf("Outcome:  %s\n\n", t.Outcome))
 	}
 
@@ -93,6 +104,14 @@ func GenerateA4Summary(state *engine.GameState, p *persona.Persona) *A4Report {
 	sb.WriteString("   scaffolding for a federated commonwealth of free star systems, setting the historical foundation for the\n")
 	sb.WriteString("   eventual rise of galactic federalism.\n\n")
 
+	if len(state.Subagents) > 0 {
+		sb.WriteString("4. Autonomous Sub-Agent Roster & Cognitive Delegations:\n")
+		for _, prof := range state.Subagents {
+			sb.WriteString(fmt.Sprintf("   - %-24s [Model: %-10s | Effort: %-6s]: %s\n", prof.Name, prof.Model, prof.Effort, prof.Role))
+		}
+		sb.WriteString("\n")
+	}
+
 	// Thoughts for Arthur Gray
 	thoughts := fmt.Sprintf(
 		"Asimov's 'The Stars, Like Dust' occupies a unique ideological junction in his Galactic Empire timeline. "+
@@ -108,7 +127,7 @@ func GenerateA4Summary(state *engine.GameState, p *persona.Persona) *A4Report {
 		fmt.Sprintf("Under the %s stance, %s achieved the '%s' ending. Would you like to test a diametrically opposed stance (e.g. %s) to observe the divergence?",
 			state.Stance, p.Name, state.EndingBranch, getOpposedStance(state.Stance)),
 		"Would you like us to log branch-comparison diffs in the database when multiple runs of the same character are executed across different temperature settings?",
-		"In future iterations, should sub-agents for Aratap and Jonti actively counter-adjust their own stances in real-time in response to player choices?",
+		"How do the autonomous sub-agent model tierings (e.g. Aratap on pro vs Jonti on flash) align with your expectations of Asimov's character depth and tactical friction?",
 	}
 
 	sb.WriteString("----------------------------------------------------------------------------------------\n")

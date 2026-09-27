@@ -19,6 +19,7 @@ func main() {
 	stanceFlag := flag.String("stance", "balanced", "Tactical Stance modifier (balanced, aggressive, covert, diplomatic, inquisitive)")
 	tempFlag := flag.Float64("temp", 0.0, "Stochastic sampling temperature (0.0 = deterministic; >0.0 = Softmax Boltzmann sampling)")
 	seedFlag := flag.Int64("seed", 0, "PRNG seed for reproducible stochastic simulation (0 = system clock)")
+	subagentsFlag := flag.String("subagents", "off", "Sub-agent orchestration for secondary characters ('off', 'archetype', 'random')")
 	dbFlag := flag.String("db", "data/stars_universe.db", "Path to embedded database file")
 	metaFlag := flag.String("metadata", "metadata", "Path to persona metadata directory")
 	commFlag := flag.String("comm", "comm", "Path to communication dispatches directory")
@@ -54,6 +55,10 @@ func main() {
 		fmt.Println("  • covert      : Maximum stealth, counter-surveillance, and avoiding imperial attention")
 		fmt.Println("  • diplomatic  : Negotiation, constitutional pacts, and alliance formation")
 		fmt.Println("  • inquisitive : Scientific probe, navigational analysis, and psychological detection")
+		fmt.Println("\nSub-Agent Orchestration modes via --subagents:")
+		fmt.Println("  • off       : Standard local evaluation heuristics (default)")
+		fmt.Println("  • archetype : Tailored models & effort tiers (e.g. Aratap=pro, Jonti=flash, Hinrik=flash_lite)")
+		fmt.Println("  • random    : Random model (flash_lite/flash/pro) and effort allocation per character")
 		return
 	}
 
@@ -79,15 +84,19 @@ func main() {
 		fmt.Printf("LAUNCHING AUTONOMOUS SIMULATION: The Stars, Like Dust\n")
 		fmt.Printf("Selected Vantage: %s (%s)\n", targetPersona.Name, targetPersona.Title)
 		fmt.Printf("Tactical Stance : %s | Temperature: %.2f\n", *stanceFlag, *tempFlag)
+		if *subagentsFlag != "" && *subagentsFlag != "off" {
+			fmt.Printf("Sub-Agents Cast : Mode '%s' (Dynamic HCP Inter-Agent Standoffs Active)\n", *subagentsFlag)
+		}
 		fmt.Printf("Database: %s (Ceiling: < 500 MB)\n", *dbFlag)
 		fmt.Printf("================================================================================\n\n")
 	}
 
 	opts := engine.SimulationOptions{
-		POV:         pov,
-		Stance:      *stanceFlag,
-		Temperature: *tempFlag,
-		Seed:        *seedFlag,
+		POV:          pov,
+		Stance:       *stanceFlag,
+		Temperature:  *tempFlag,
+		Seed:         *seedFlag,
+		SubagentMode: *subagentsFlag,
 	}
 
 	state, err := simEngine.RunEpisodeWithOptions(opts)
@@ -104,6 +113,12 @@ func main() {
 			fmt.Printf("  Choice  : %s\n", t.Decision.ChosenAction.Description)
 			if t.Dialogue != "" {
 				fmt.Printf("  Dialogue: \"%s\"\n", t.Dialogue)
+			}
+			if t.SubagentStandoff != nil {
+				fmt.Printf("  ↳ Standoff : %s [Model: %s | Effort: %s]\n",
+					t.SubagentStandoff.TargetActorName, t.SubagentStandoff.SubagentProfile.Model, t.SubagentStandoff.SubagentProfile.Effort)
+				fmt.Printf("    HCP Files: %s ⇄ %s\n", t.SubagentStandoff.OutboundHCPFile, t.SubagentStandoff.CounterHCPFile)
+				fmt.Printf("    Tactics  : %s\n", t.SubagentStandoff.TacticalStroke)
 			}
 			fmt.Printf("  Rationale: %s\n", t.Decision.Rationale)
 			fmt.Printf("  Outcome : %s\n\n", t.Outcome)

@@ -80,6 +80,12 @@ Formats each completed session into a structured 1-to-2 page A4 report:
 - **Section V**: Reflective Thoughts for Arthur Gray.
 - **Section VI**: Queries & Inquiries for the User.
 
+### 2.6 Multi-Agent Sub-Agent Delegation (`internal/engine/subagents.go`)
+Provides autonomous secondary cast modeling:
+- **Role & Model Allocation**: Maps non-POV actors to autonomous sub-agents with archetypal or randomized LLM tiers (`flash_lite`, `flash`, `pro`) and cognitive effort profiles (`fast`, `medium`, `high`).
+- **Dynamic HCP Standoffs**: Formats protagonist actions into outbound `.hcp` dispatches, computes recipient sub-agent reactions matching persona drivers, and generates counter-dispatches in `comm/`.
+- **Token & Loop Protection**: Enforces strict 1-round ping-pong exchanges with zero recursive loops.
+
 ---
 
 ## 3. Data Flow

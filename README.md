@@ -32,6 +32,9 @@ The game is designed for **autonomous execution** by an AI agent—modeling the 
 6. **1-to-2 A4 Page Summary Deliverable**:
    At the end of each simulation episode, outputs a structured 1-to-2 A4 page narrative report containing psychological profiles, turn breakdowns, metaopinions manifested, reflective thoughts, and targeted queries for the user.
 
+7. **Multi-Agent Sub-Agent Delegation (`--subagents`)**:
+   Delegates secondary characters encountered during the simulation to autonomous sub-agents with randomized or archetype-tailored model tiers (`flash_lite`, `flash`, `pro`) and cognitive effort levels, conducting dynamic 1-round HCP dispatch standoffs in `comm/`.
+
 ---
 
 ## Project Structure
