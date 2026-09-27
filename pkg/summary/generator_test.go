@@ -95,4 +95,51 @@ func TestGenerateA4Summary(t *testing.T) {
 	if report.Thoughts == "" {
 		t.Errorf("expected thoughts for user")
 	}
+
+	// Test covert ending branch narration
+	stateCovert := *state
+	stateCovert.Stance = "covert"
+	stateCovert.EndingBranch = "Covert Archival Exfiltration & Shadow Federation"
+	stateCovert.Subagents = map[string]engine.SubagentProfile{
+		"simok_aratap": {
+			Name:   "Commissioner Simok Aratap",
+			Model:  "pro",
+			Effort: "high",
+			Role:   "Imperial Commissioner",
+		},
+	}
+	reportCovert := GenerateA4Summary(&stateCovert, p)
+	if !strings.Contains(reportCovert.FullReport, "Covert Archival Exfiltration & Shadow Federation") {
+		t.Errorf("report missing covert ending branch")
+	}
+	if !strings.Contains(reportCovert.FullReport, "electronic dust shrouds") {
+		t.Errorf("report missing covert narrative detail")
+	}
+	if !strings.Contains(reportCovert.FullReport, "Autonomous Sub-Agent Roster") {
+		t.Errorf("report missing sub-agent roster")
+	}
+
+	// Test inquisitive ending branch narration
+	stateInquisitive := *state
+	stateInquisitive.Stance = "inquisitive"
+	stateInquisitive.EndingBranch = "Astrogational Recovery of the Pre-Atomic Sanctuary"
+	reportInq := GenerateA4Summary(&stateInquisitive, p)
+	if !strings.Contains(reportInq.FullReport, "Astrogational Recovery of the Pre-Atomic Sanctuary") {
+		t.Errorf("report missing inquisitive ending branch")
+	}
+	if !strings.Contains(reportInq.FullReport, "Pre-Atomic planetary beacon coordinates") {
+		t.Errorf("report missing inquisitive narrative detail")
+	}
+
+	// Test canonical ending branch narration
+	stateCanonical := *state
+	stateCanonical.Stance = "diplomatic"
+	stateCanonical.EndingBranch = "Canonical Proclamation of the Free Federation"
+	reportCanon := GenerateA4Summary(&stateCanonical, p)
+	if !strings.Contains(reportCanon.FullReport, "Canonical Proclamation of the Free Federation") {
+		t.Errorf("report missing canonical ending branch")
+	}
+	if !strings.Contains(reportCanon.FullReport, "limits of Spartan hegemony") {
+		t.Errorf("report missing canonical narrative detail")
+	}
 }

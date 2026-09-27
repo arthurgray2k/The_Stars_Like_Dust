@@ -233,16 +233,32 @@ func (e *Engine) RunEpisodeWithOptions(opts SimulationOptions) (*GameState, erro
 	}
 
 	// Final outcome resolution based on dynamic branching
+	var lastAction persona.CandidateAction
+	if len(state.TurnHistory) > 0 {
+		lastAction = state.TurnHistory[len(state.TurnHistory)-1].Decision.ChosenAction
+	}
+
 	var finalOutcome string
-	if state.BlastersEngaged {
+	switch lastAction.TacticalType {
+	case "AGGRESSIVE":
 		state.EndingBranch = "Aggressive Naval Clash & Ceasefire Compromise"
-		finalOutcome = fmt.Sprintf("Episode resolved after direct starship blaster fire. Although Remembrance engaged Aratap's capital cruiser, Aratap's historical rationality averted planetary obliteration, securing an armed truce.")
-	} else if stance == "covert" {
+		finalOutcome = "Episode resolved after direct starship blaster fire. Although Remembrance engaged Aratap's capital cruiser, Aratap's historical rationality averted planetary obliteration, securing an armed truce."
+	case "COVERT":
 		state.EndingBranch = "Covert Archival Exfiltration & Shadow Federation"
-		finalOutcome = fmt.Sprintf("Episode resolved through subterranean stealth. Hinrik's ancient constitutional parchment was secured before imperial censors could trace the archival leak.")
-	} else {
-		state.EndingBranch = "Canonical Proclamation of the Free Federation"
-		finalOutcome = fmt.Sprintf("Episode successfully resolved through the decisive agency of %s across %d narrative turns under %s stance.", povPersona.Name, len(scenes), stance)
+		finalOutcome = "Episode resolved through subterranean stealth. Hinrik's ancient constitutional parchment was secured before imperial censors could trace the archival leak."
+	case "INQUISITIVE":
+		state.EndingBranch = "Astrogational Recovery of the Pre-Atomic Sanctuary"
+		finalOutcome = "Episode resolved through deep astrogational inquiry. Sensor triangulations in the Horsehead Nebula revealed the coordinate vault of the legendary Pre-Atomic Earth sanctuary."
+	case "DIPLOMATIC":
+		fallthrough
+	default:
+		if state.BlastersEngaged {
+			state.EndingBranch = "Aggressive Naval Clash & Ceasefire Compromise"
+			finalOutcome = "Episode resolved after direct starship blaster fire. Although Remembrance engaged Aratap's capital cruiser, Aratap's historical rationality averted planetary obliteration, securing an armed truce."
+		} else {
+			state.EndingBranch = "Canonical Proclamation of the Free Federation"
+			finalOutcome = fmt.Sprintf("Episode successfully resolved through the decisive agency of %s across %d narrative turns under %s stance.", povPersona.Name, len(scenes), stance)
+		}
 	}
 
 	if subagentMode != "off" && len(state.Subagents) > 0 {

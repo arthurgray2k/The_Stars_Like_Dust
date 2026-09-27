@@ -77,10 +77,17 @@ You can modify a character's tactical posture to explore divergent storylines an
 
 ### Stance Modifiers
 - `balanced` (default): Follows canon-accurate psychological weighting.
-- `aggressive`: Prioritizes high-risk, direct-action options (+40 score boost), unlocking violent naval skirmishes and armed ceasefires.
-- `covert`: Prioritizes stealth codes and sensor evasion (+40 score boost), unlocking subterranean archival exfiltration.
-- `diplomatic`: Prioritizes negotiation and ideological pacts (+40 score boost).
-- `inquisitive`: Prioritizes scientific astrogation and psychological probe chords (+40 score boost).
+- `aggressive`: Prioritizes high-risk, direct-action options (+50 boost, -25 penalty), unlocking violent naval skirmishes.
+- `covert`: Prioritizes stealth codes and sensor evasion (+50 boost, -25 penalty), unlocking subterranean archival exfiltration.
+- `diplomatic`: Prioritizes negotiation and ideological pacts (+50 boost, -25 penalty), leading to constitutional federation.
+- `inquisitive`: Prioritizes scientific astrogation and psychological probe chords (+50 boost, -25 penalty), unlocking pre-atomic coordinate discovery.
+
+### Ending Resolution Branches
+The simulation dynamically resolves one of four strategic ending archetypes based on your climax decisions:
+1. **Canonical Proclamation of the Free Federation**: Aratap's fleet stands down as the ancient Pre-Atomic Constitution is proclaimed across fifty star worlds.
+2. **Aggressive Naval Clash & Ceasefire Compromise**: Direct blaster warfare between *Remembrance* and the Khanate vanguard leads to an armed ideological truce.
+3. **Covert Archival Exfiltration & Shadow Federation**: Electronic dust shrouds exfiltrate the parchment into the deep-space void, seeding the clandestine resistance network.
+4. **Astrogational Recovery of the Pre-Atomic Sanctuary**: Deep-dust spectrometric telemetry unlocks the coordinate vault pointing to the ancient Terran sanctuary.
 
 ---
 

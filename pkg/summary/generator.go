@@ -80,14 +80,20 @@ func GenerateA4Summary(state *engine.GameState, p *persona.Persona) *A4Report {
 	sb.WriteString("SECTION IV: STRATEGIC & INTERSTELLAR RESOLUTION\n")
 	sb.WriteString("----------------------------------------------------------------------------------------\n")
 	sb.WriteString(fmt.Sprintf("1. Resolution Archetype: [%s]\n", state.EndingBranch))
-	if state.BlastersEngaged {
+	switch state.EndingBranch {
+	case "Aggressive Naval Clash & Ceasefire Compromise":
 		sb.WriteString("   Aggressive confrontation provoked direct starship blaster fire between Remembrance and the\n")
 		sb.WriteString("   Tyranni picket fleet. While violent engagement exposed tactical vulnerabilities, Aratap's\n")
 		sb.WriteString("   philosophical restraint averted orbital genocide, establishing an armed ideological ceasefire.\n\n")
-	} else if state.Stance == "covert" {
-		sb.WriteString("   Stealth doctrine kept Remembrance below deep-space sensor thresholds. By bypassing court alarms,\n")
-		sb.WriteString("   the conspirators extracted Hinrik's archival secret without triggering imperial fleet mobilization.\n\n")
-	} else {
+	case "Covert Archival Exfiltration & Shadow Federation":
+		sb.WriteString("   Stealth doctrine kept Remembrance below deep-space sensor thresholds. By bypassing court alarms and\n")
+		sb.WriteString("   utilizing electronic dust shrouds, the conspirators exfiltrated Hinrik's ancient constitutional parchment\n")
+		sb.WriteString("   into the clandestine shadow federation without imperial fleet retaliation.\n\n")
+	case "Astrogational Recovery of the Pre-Atomic Sanctuary":
+		sb.WriteString("   Analytical sensor sweeps deciphered Pre-Atomic planetary beacon coordinates within the Horsehead Nebula,\n")
+		sb.WriteString("   recovering the intact archival vault and charting the legendary pre-atomic sanctuary for future\n")
+		sb.WriteString("   generations of sovereign star systems.\n\n")
+	default: // "Canonical Proclamation of the Free Federation"
 		sb.WriteString("   The imperial encirclement inside the Horsehead Nebula verified Aratap's tactical brilliance in utilizing\n")
 		sb.WriteString("   sub-ether tracking. However, Aratap's philosophical realization that military conquest cannot extinguish\n")
 		sb.WriteString("   enduring constitutional ideas averted planetary bombardment, validating the limits of Spartan hegemony.\n\n")

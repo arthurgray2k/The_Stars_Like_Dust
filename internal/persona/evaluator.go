@@ -95,31 +95,31 @@ func (p *Persona) EvaluateChoiceWithConfig(sceneDescription string, candidates [
 		switch stance {
 		case "aggressive":
 			if cand.TacticalType == "AGGRESSIVE" {
-				score += 40.0
+				score += 50.0
 			} else {
-				score -= 20.0
+				score -= 25.0
 			}
 			score -= cand.BaseRisk * 10.0 // Reduced fear of risk
 		case "covert":
 			if cand.TacticalType == "COVERT" {
-				score += 40.0
+				score += 50.0
 			} else {
-				score -= 20.0
+				score -= 25.0
 			}
-			if cand.BaseRisk < 0.4 {
+			if cand.BaseRisk <= 0.5 {
 				score += 15.0 // Rewarding stealth safety
 			}
 		case "diplomatic":
 			if cand.TacticalType == "DIPLOMATIC" {
-				score += 40.0
+				score += 50.0
 			} else {
-				score -= 20.0
+				score -= 25.0
 			}
 		case "inquisitive":
 			if cand.TacticalType == "INQUISITIVE" {
-				score += 40.0
+				score += 50.0
 			} else {
-				score -= 20.0
+				score -= 25.0
 			}
 		default: // balanced
 			if cand.BaseRisk > 0.6 && !isAthletic {
@@ -169,7 +169,8 @@ func (p *Persona) EvaluateChoiceWithConfig(sceneDescription string, candidates [
 		}
 	}
 
-	// Softmax / Boltzmann Temperature Sampling
+	// Softmax / Boltzmann Temperature Sampling with calibrated logit scaling
+	const logitScale = 15.0 // Scales 15 heuristic score points to ~1 unit of logit
 	maxScore := scores[0]
 	for _, s := range scores {
 		if s > maxScore {
@@ -180,7 +181,7 @@ func (p *Persona) EvaluateChoiceWithConfig(sceneDescription string, candidates [
 	expVals := make([]float64, len(scores))
 	sumExp := 0.0
 	for i, s := range scores {
-		val := math.Exp((s - maxScore) / cfg.Temperature)
+		val := math.Exp((s - maxScore) / (logitScale * cfg.Temperature))
 		expVals[i] = val
 		sumExp += val
 	}

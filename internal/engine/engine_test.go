@@ -134,30 +134,73 @@ func TestEngineDivergentOutcomesSameCharacter(t *testing.T) {
 		t.Fatalf("run covert failed: %v", err)
 	}
 
-	// Verify that aggressive stance triggered different choices than balanced
-	// For instance, turn 2 (Hinriad court confrontation) or turn 5 (blaster combat)
-	if stateBalanced.EndingBranch == stateAggressive.EndingBranch {
-		t.Errorf("expected different ending branch between balanced (%s) and aggressive (%s)",
-			stateBalanced.EndingBranch, stateAggressive.EndingBranch)
-	}
-
-	if stateCovert.EndingBranch == stateAggressive.EndingBranch {
-		t.Errorf("expected different ending branch between covert (%s) and aggressive (%s)",
-			stateCovert.EndingBranch, stateAggressive.EndingBranch)
-	}
-
-	// Verify stochastic run with temperature > 0
-	stateStochastic, err := eng.RunEpisodeWithOptions(SimulationOptions{
+	// Run 4: Inquisitive stance
+	stateInquisitive, err := eng.RunEpisodeWithOptions(SimulationOptions{
 		POV:         "biron_farrill",
-		Stance:      "balanced",
-		Temperature: 0.9,
-		Seed:        42,
+		Stance:      "inquisitive",
+		Temperature: 0.0,
+		Seed:        100,
 	})
 	if err != nil {
-		t.Fatalf("run stochastic failed: %v", err)
+		t.Fatalf("run inquisitive failed: %v", err)
 	}
-	if len(stateStochastic.TurnHistory) != 5 {
-		t.Errorf("expected 5 turns, got %d", len(stateStochastic.TurnHistory))
+
+	// Verify that each stance produced its distinct ending branch
+	expectedBalancedEnding := "Canonical Proclamation of the Free Federation"
+	expectedAggressiveEnding := "Aggressive Naval Clash & Ceasefire Compromise"
+	expectedCovertEnding := "Covert Archival Exfiltration & Shadow Federation"
+	expectedInquisitiveEnding := "Astrogational Recovery of the Pre-Atomic Sanctuary"
+
+	if stateBalanced.EndingBranch != expectedBalancedEnding {
+		t.Errorf("expected balanced ending %s, got %s", expectedBalancedEnding, stateBalanced.EndingBranch)
+	}
+	if stateAggressive.EndingBranch != expectedAggressiveEnding {
+		t.Errorf("expected aggressive ending %s, got %s", expectedAggressiveEnding, stateAggressive.EndingBranch)
+	}
+	if stateCovert.EndingBranch != expectedCovertEnding {
+		t.Errorf("expected covert ending %s, got %s", expectedCovertEnding, stateCovert.EndingBranch)
+	}
+	if stateInquisitive.EndingBranch != expectedInquisitiveEnding {
+		t.Errorf("expected inquisitive ending %s, got %s", expectedInquisitiveEnding, stateInquisitive.EndingBranch)
+	}
+
+	// Verify that Scene 5 choices match each stance
+	lastTurnBalanced := stateBalanced.TurnHistory[4].Decision.ChosenAction.ID
+	lastTurnAggressive := stateAggressive.TurnHistory[4].Decision.ChosenAction.ID
+	lastTurnCovert := stateCovert.TurnHistory[4].Decision.ChosenAction.ID
+	lastTurnInquisitive := stateInquisitive.TurnHistory[4].Decision.ChosenAction.ID
+
+	if lastTurnBalanced != "biron_proclaim_constitution" {
+		t.Errorf("expected balanced last turn biron_proclaim_constitution, got %s", lastTurnBalanced)
+	}
+	if lastTurnAggressive != "biron_fire_blasters" {
+		t.Errorf("expected aggressive last turn biron_fire_blasters, got %s", lastTurnAggressive)
+	}
+	if lastTurnCovert != "biron_covert_exfiltration" {
+		t.Errorf("expected covert last turn biron_covert_exfiltration, got %s", lastTurnCovert)
+	}
+	if lastTurnInquisitive != "biron_probe_nebula_archives" {
+		t.Errorf("expected inquisitive last turn biron_probe_nebula_archives, got %s", lastTurnInquisitive)
+	}
+
+	// Verify stochastic run with temperature > 0 across diverse seeds
+	scene5Choices := make(map[string]int)
+	for i := int64(1); i <= 50; i++ {
+		stochState, err := eng.RunEpisodeWithOptions(SimulationOptions{
+			POV:         "biron_farrill",
+			Stance:      "balanced",
+			Temperature: 1.5,
+			Seed:        i * 777,
+		})
+		if err != nil {
+			t.Fatalf("run stochastic %d failed: %v", i, err)
+		}
+		choice := stochState.TurnHistory[4].Decision.ChosenAction.ID
+		scene5Choices[choice]++
+	}
+	// At T=1.5, multiple distinct choices must have been sampled across 50 runs!
+	if len(scene5Choices) < 2 {
+		t.Errorf("expected at least 2 distinct Scene 5 choices under T=1.5 Boltzmann sampling, got: %v", scene5Choices)
 	}
 }
 
