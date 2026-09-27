@@ -16,6 +16,9 @@ import (
 
 func main() {
 	povFlag := flag.String("pov", "biron_farrill", "Character Point of View (biron_farrill, artemisia_hinriad, simok_aratap, gillbret_hinriad, sander_jonti, hinrik_hinriad)")
+	stanceFlag := flag.String("stance", "balanced", "Tactical Stance modifier (balanced, aggressive, covert, diplomatic, inquisitive)")
+	tempFlag := flag.Float64("temp", 0.0, "Stochastic sampling temperature (0.0 = deterministic; >0.0 = Softmax Boltzmann sampling)")
+	seedFlag := flag.Int64("seed", 0, "PRNG seed for reproducible stochastic simulation (0 = system clock)")
 	dbFlag := flag.String("db", "data/stars_universe.db", "Path to embedded database file")
 	metaFlag := flag.String("metadata", "metadata", "Path to persona metadata directory")
 	commFlag := flag.String("comm", "comm", "Path to communication dispatches directory")
@@ -45,6 +48,12 @@ func main() {
 		for _, p := range personas {
 			fmt.Printf("  • %-18s : %s (%s) — Allegiance: %s\n", p.ID, p.Name, p.Title, p.Allegiance)
 		}
+		fmt.Println("\nTactical Stances available via --stance:")
+		fmt.Println("  • balanced    : Canon-accurate psychological goal alignment")
+		fmt.Println("  • aggressive  : Direct action, blaster engagement, and elevated risk tolerance")
+		fmt.Println("  • covert      : Maximum stealth, counter-surveillance, and avoiding imperial attention")
+		fmt.Println("  • diplomatic  : Negotiation, constitutional pacts, and alliance formation")
+		fmt.Println("  • inquisitive : Scientific probe, navigational analysis, and psychological detection")
 		return
 	}
 
@@ -69,11 +78,19 @@ func main() {
 		fmt.Printf("================================================================================\n")
 		fmt.Printf("LAUNCHING AUTONOMOUS SIMULATION: The Stars, Like Dust\n")
 		fmt.Printf("Selected Vantage: %s (%s)\n", targetPersona.Name, targetPersona.Title)
+		fmt.Printf("Tactical Stance : %s | Temperature: %.2f\n", *stanceFlag, *tempFlag)
 		fmt.Printf("Database: %s (Ceiling: < 500 MB)\n", *dbFlag)
 		fmt.Printf("================================================================================\n\n")
 	}
 
-	state, err := simEngine.RunEpisode(pov, "")
+	opts := engine.SimulationOptions{
+		POV:         pov,
+		Stance:      *stanceFlag,
+		Temperature: *tempFlag,
+		Seed:        *seedFlag,
+	}
+
+	state, err := simEngine.RunEpisodeWithOptions(opts)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Simulation execution failed: %v\n", err)
 		os.Exit(1)

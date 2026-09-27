@@ -35,6 +35,10 @@ func TestGenerateA4Summary(t *testing.T) {
 		SessionID:      "test-session-001",
 		POVCharacterID: "biron_farrill",
 		EpisodeTitle:   "Vantage of Biron Farrill",
+		Stance:         "aggressive",
+		Temperature:    0.7,
+		Seed:           999,
+		EndingBranch:   "Aggressive Naval Clash & Ceasefire Compromise",
 		MaxTurns:       1,
 		TurnHistory: []engine.TurnResult{
 			{
@@ -63,6 +67,15 @@ func TestGenerateA4Summary(t *testing.T) {
 
 	if !strings.Contains(report.FullReport, "THE STARS, LIKE DUST — AUTONOMOUS SIMULATION REPORT") {
 		t.Errorf("report missing header")
+	}
+	if !strings.Contains(report.FullReport, "TACTICAL STANCE: AGGRESSIVE") {
+		t.Errorf("report missing tactical stance")
+	}
+	if !strings.Contains(report.FullReport, "TEMPERATURE: 0.70") {
+		t.Errorf("report missing temperature")
+	}
+	if !strings.Contains(report.FullReport, "Aggressive Naval Clash") {
+		t.Errorf("report missing branch resolution")
 	}
 	if !strings.Contains(report.FullReport, "SECTION I: PSYCHOLOGICAL PROFILE") {
 		t.Errorf("report missing section I")

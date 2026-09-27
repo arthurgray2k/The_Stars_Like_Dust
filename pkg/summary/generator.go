@@ -28,6 +28,8 @@ func GenerateA4Summary(state *engine.GameState, p *persona.Persona) *A4Report {
 	sb.WriteString(fmt.Sprintf("PRIMARY POINT OF VIEW (POV): %s (%s)\n", p.Name, p.Title))
 	sb.WriteString(fmt.Sprintf("ALLEGIANCE: %s | HOME WORLD: %s\n", p.Allegiance, p.HomeWorld))
 	sb.WriteString(fmt.Sprintf("NARRATIVE ARC: %s\n", state.EpisodeTitle))
+	sb.WriteString(fmt.Sprintf("TACTICAL STANCE: %-12s | TEMPERATURE: %.2f | PRNG SEED: %d\n", strings.ToUpper(state.Stance), state.Temperature, state.Seed))
+	sb.WriteString(fmt.Sprintf("DIVERGENT BRANCH RESOLUTION: %s\n", state.EndingBranch))
 	sb.WriteString(fmt.Sprintf("TOTAL TURNS EXECUTED: %d / %d (Bounded Episodic Run)\n\n", len(state.TurnHistory), state.MaxTurns))
 
 	sb.WriteString("----------------------------------------------------------------------------------------\n")
@@ -35,7 +37,8 @@ func GenerateA4Summary(state *engine.GameState, p *persona.Persona) *A4Report {
 	sb.WriteString("----------------------------------------------------------------------------------------\n")
 	sb.WriteString(fmt.Sprintf("Primary Directive:  %s\n", p.PsychologicalDrivers.PrimaryGoal))
 	sb.WriteString(fmt.Sprintf("Core Vulnerability: %s\n", p.PsychologicalDrivers.Vulnerability))
-	sb.WriteString(fmt.Sprintf("Character Growth:   %s\n\n", p.PsychologicalDrivers.GrowthArc))
+	sb.WriteString(fmt.Sprintf("Character Growth:   %s\n", p.PsychologicalDrivers.GrowthArc))
+	sb.WriteString(fmt.Sprintf("Active Stance Skew: %s (Influenced candidate heuristic weighting)\n\n", state.Stance))
 
 	sb.WriteString("----------------------------------------------------------------------------------------\n")
 	sb.WriteString("SECTION II: CHRONOLOGICAL SCENE TRAJECTORY & DRAMATIC DECISIONS\n")
@@ -65,10 +68,19 @@ func GenerateA4Summary(state *engine.GameState, p *persona.Persona) *A4Report {
 	sb.WriteString("----------------------------------------------------------------------------------------\n")
 	sb.WriteString("SECTION IV: STRATEGIC & INTERSTELLAR RESOLUTION\n")
 	sb.WriteString("----------------------------------------------------------------------------------------\n")
-	sb.WriteString("1. The Tyranni Fleet & Commissioner Aratap:\n")
-	sb.WriteString("   The imperial encirclement inside the Horsehead Nebula verified Aratap's tactical brilliance in utilizing\n")
-	sb.WriteString("   sub-ether tracking. However, Aratap's philosophical realization that military conquest cannot extinguish\n")
-	sb.WriteString("   enduring constitutional ideas averted planetary bombardment, validating the limits of Spartan hegemony.\n\n")
+	sb.WriteString(fmt.Sprintf("1. Resolution Archetype: [%s]\n", state.EndingBranch))
+	if state.BlastersEngaged {
+		sb.WriteString("   Aggressive confrontation provoked direct starship blaster fire between Remembrance and the\n")
+		sb.WriteString("   Tyranni picket fleet. While violent engagement exposed tactical vulnerabilities, Aratap's\n")
+		sb.WriteString("   philosophical restraint averted orbital genocide, establishing an armed ideological ceasefire.\n\n")
+	} else if state.Stance == "covert" {
+		sb.WriteString("   Stealth doctrine kept Remembrance below deep-space sensor thresholds. By bypassing court alarms,\n")
+		sb.WriteString("   the conspirators extracted Hinrik's archival secret without triggering imperial fleet mobilization.\n\n")
+	} else {
+		sb.WriteString("   The imperial encirclement inside the Horsehead Nebula verified Aratap's tactical brilliance in utilizing\n")
+		sb.WriteString("   sub-ether tracking. However, Aratap's philosophical realization that military conquest cannot extinguish\n")
+		sb.WriteString("   enduring constitutional ideas averted planetary bombardment, validating the limits of Spartan hegemony.\n\n")
+	}
 
 	sb.WriteString("2. The Autarchy of Lingane & Sander Jonti:\n")
 	sb.WriteString("   Jonti's Machiavellian duplicity and betrayal of the Rancher of Widemos was definitively exposed via\n")
@@ -84,18 +96,19 @@ func GenerateA4Summary(state *engine.GameState, p *persona.Persona) *A4Report {
 	// Thoughts for Arthur Gray
 	thoughts := fmt.Sprintf(
 		"Asimov's 'The Stars, Like Dust' occupies a unique ideological junction in his Galactic Empire timeline. "+
-			"By simulating from the POV of %s, we witness the clash between feudal decadence, military imperialism (Tyrann), "+
-			"fascistic opportunism (Lingane), and representative constitutionalism (the Earth document). "+
-			"The simulation demonstrates that Hinrik's apparent idiocy was an act of profound strategic sacrifice, while "+
-			"Biron's maturation lies in recognizing that liberty cannot be sustained by revenge alone, but requires institutional law.",
-		p.Name,
+			"By simulating from the POV of %s under a %s stance (temperature=%.2f), we witness how differing tactical "+
+			"dispositions alter the balance between feudal decadence, military imperialism (Tyrann), fascistic opportunism (Lingane), "+
+			"and representative constitutionalism (the Earth document). The resulting branch '%s' demonstrates that "+
+			"character agency directly reshapes the interstellar balance of power.",
+		p.Name, state.Stance, state.Temperature, state.EndingBranch,
 	)
 
 	// Inquiries for the user
 	queries := []string{
-		fmt.Sprintf("Given %s's perspective on galactic governance, would you prefer the next episode to explore the immediate constitutional convention of the 50 kingdoms or the clandestine aftermath on Tyrann?", p.Name),
-		"Should we implement an expanded sub-agent negotiation protocol where non-POV leaders (e.g. Aratap and Jonti) engage in interactive diplomatic counter-proposals during turn evaluation?",
-		"In future simulation runs, would you like to explore alternative non-canonical branching paths where Sander Jonti successfully captures the ancient document before Aratap intervenes?",
+		fmt.Sprintf("Under the %s stance, %s achieved the '%s' ending. Would you like to test a diametrically opposed stance (e.g. %s) to observe the divergence?",
+			state.Stance, p.Name, state.EndingBranch, getOpposedStance(state.Stance)),
+		"Would you like us to log branch-comparison diffs in the database when multiple runs of the same character are executed across different temperature settings?",
+		"In future iterations, should sub-agents for Aratap and Jonti actively counter-adjust their own stances in real-time in response to player choices?",
 	}
 
 	sb.WriteString("----------------------------------------------------------------------------------------\n")
@@ -116,5 +129,18 @@ func GenerateA4Summary(state *engine.GameState, p *persona.Persona) *A4Report {
 		FullReport: sb.String(),
 		Thoughts:   thoughts,
 		Queries:    queries,
+	}
+}
+
+func getOpposedStance(s string) string {
+	switch s {
+	case "aggressive":
+		return "covert or diplomatic"
+	case "covert":
+		return "aggressive"
+	case "diplomatic":
+		return "aggressive"
+	default:
+		return "aggressive"
 	}
 }

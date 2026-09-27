@@ -57,7 +57,51 @@ To omit scene logs and output strictly the 1-to-2 A4 page report deliverable:
 
 ---
 
-## 3. Database Persistence & Inspection
+## 3. Dynamic Narrative Branching & Stances
+
+You can modify a character's tactical posture to explore divergent storylines and alternate endings:
+
+```bash
+# Run with an aggressive posture (direct confrontation, blaster engagement)
+./stars --pov biron_farrill --stance aggressive
+
+# Run with a covert posture (stealth evasion, subterranean exfiltration)
+./stars --pov biron_farrill --stance covert
+
+# Run with a diplomatic posture (constitutional negotiation)
+./stars --pov biron_farrill --stance diplomatic
+
+# Run with an inquisitive posture (investigative probe and psychological detection)
+./stars --pov biron_farrill --stance inquisitive
+```
+
+### Stance Modifiers
+- `balanced` (default): Follows canon-accurate psychological weighting.
+- `aggressive`: Prioritizes high-risk, direct-action options (+40 score boost), unlocking violent naval skirmishes and armed ceasefires.
+- `covert`: Prioritizes stealth codes and sensor evasion (+40 score boost), unlocking subterranean archival exfiltration.
+- `diplomatic`: Prioritizes negotiation and ideological pacts (+40 score boost).
+- `inquisitive`: Prioritizes scientific astrogation and psychological probe chords (+40 score boost).
+
+---
+
+## 4. Stochastic Temperature Sampling (`--temp` & `--seed`)
+
+To introduce probabilistic variability into a character's choices rather than pure deterministic optimization:
+
+```bash
+# Run with stochastic Boltzmann sampling (temperature = 0.8)
+./stars --pov biron_farrill --temp 0.8
+
+# Run with a reproducible PRNG seed for stochastic replay
+./stars --pov biron_farrill --temp 0.8 --seed 4242
+```
+- At `--temp 0.0` (default): The decision engine is strictly deterministic (classic argmax).
+- At `--temp 0.5 - 1.2`: High-probability actions are preferred, but second-best or desperate alternatives may be triggered.
+- At `--temp > 1.5`: Decisions become highly volatile, testing unpredictable narrative branches.
+
+---
+
+## 5. Database Persistence & Inspection
 
 The simulation state is automatically persisted in `data/stars_universe.db`.
 

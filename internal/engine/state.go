@@ -7,19 +7,25 @@ import (
 
 // GameState encapsulates the simulation runtime state across turns.
 type GameState struct {
-	SessionID         string                      `json:"session_id"`
-	POVCharacterID    string                      `json:"pov_character_id"`
-	EpisodeTitle      string                      `json:"episode_title"`
-	CurrentTurn       int                         `json:"current_turn"`
-	MaxTurns          int                         `json:"max_turns"`
-	Location          string                      `json:"location"`
-	ActiveShip        string                      `json:"active_ship"`
-	TracerAttached    bool                        `json:"tracer_attached"`
-	DocumentRecovered bool                        `json:"document_recovered"`
-	JontiExposed      bool                        `json:"jonti_exposed"`
-	Characters        map[string]*persona.Persona `json:"characters"`
-	Dispatches        []*dsl.Dispatch             `json:"dispatches"`
-	TurnHistory       []TurnResult                `json:"turn_history"`
+	SessionID             string                      `json:"session_id"`
+	POVCharacterID        string                      `json:"pov_character_id"`
+	EpisodeTitle          string                      `json:"episode_title"`
+	Stance                string                      `json:"stance"`
+	Temperature           float64                     `json:"temperature"`
+	Seed                  int64                       `json:"seed"`
+	CurrentTurn           int                         `json:"current_turn"`
+	MaxTurns              int                         `json:"max_turns"`
+	Location              string                      `json:"location"`
+	ActiveShip            string                      `json:"active_ship"`
+	TracerAttached        bool                        `json:"tracer_attached"`
+	DocumentRecovered     bool                        `json:"document_recovered"`
+	JontiExposed          bool                        `json:"jonti_exposed"`
+	HostileCourtTriggered bool                        `json:"hostile_court_triggered"`
+	BlastersEngaged       bool                        `json:"blasters_engaged"`
+	EndingBranch          string                      `json:"ending_branch"`
+	Characters            map[string]*persona.Persona `json:"characters"`
+	Dispatches            []*dsl.Dispatch             `json:"dispatches"`
+	TurnHistory           []TurnResult                `json:"turn_history"`
 }
 
 // TurnResult captures the result of one resolved narrative step.

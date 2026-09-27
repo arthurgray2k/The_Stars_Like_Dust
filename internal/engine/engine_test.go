@@ -78,3 +78,85 @@ func TestEngineSimulationAcrossPOVs(t *testing.T) {
 		})
 	}
 }
+
+func TestEngineDivergentOutcomesSameCharacter(t *testing.T) {
+	tempDir, err := os.MkdirTemp("", "stars_divergence_test_*")
+	if err != nil {
+		t.Fatalf("failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	dbPath := filepath.Join(tempDir, "data", "test_universe.db")
+	store, err := storage.Open(dbPath)
+	if err != nil {
+		t.Fatalf("failed to open storage: %v", err)
+	}
+	defer store.Close()
+
+	metadataDir := filepath.Join("..", "..", "metadata")
+	pMgr := persona.NewManager(metadataDir)
+
+	commDir := filepath.Join("..", "..", "comm")
+	cMgr := comm.NewManager(commDir)
+
+	eng := New(store, pMgr, cMgr)
+
+	// Run 1: Balanced stance (canonical)
+	stateBalanced, err := eng.RunEpisodeWithOptions(SimulationOptions{
+		POV:         "biron_farrill",
+		Stance:      "balanced",
+		Temperature: 0.0,
+		Seed:        100,
+	})
+	if err != nil {
+		t.Fatalf("run balanced failed: %v", err)
+	}
+
+	// Run 2: Aggressive stance
+	stateAggressive, err := eng.RunEpisodeWithOptions(SimulationOptions{
+		POV:         "biron_farrill",
+		Stance:      "aggressive",
+		Temperature: 0.0,
+		Seed:        100,
+	})
+	if err != nil {
+		t.Fatalf("run aggressive failed: %v", err)
+	}
+
+	// Run 3: Covert stance
+	stateCovert, err := eng.RunEpisodeWithOptions(SimulationOptions{
+		POV:         "biron_farrill",
+		Stance:      "covert",
+		Temperature: 0.0,
+		Seed:        100,
+	})
+	if err != nil {
+		t.Fatalf("run covert failed: %v", err)
+	}
+
+	// Verify that aggressive stance triggered different choices than balanced
+	// For instance, turn 2 (Hinriad court confrontation) or turn 5 (blaster combat)
+	if stateBalanced.EndingBranch == stateAggressive.EndingBranch {
+		t.Errorf("expected different ending branch between balanced (%s) and aggressive (%s)",
+			stateBalanced.EndingBranch, stateAggressive.EndingBranch)
+	}
+
+	if stateCovert.EndingBranch == stateAggressive.EndingBranch {
+		t.Errorf("expected different ending branch between covert (%s) and aggressive (%s)",
+			stateCovert.EndingBranch, stateAggressive.EndingBranch)
+	}
+
+	// Verify stochastic run with temperature > 0
+	stateStochastic, err := eng.RunEpisodeWithOptions(SimulationOptions{
+		POV:         "biron_farrill",
+		Stance:      "balanced",
+		Temperature: 0.9,
+		Seed:        42,
+	})
+	if err != nil {
+		t.Fatalf("run stochastic failed: %v", err)
+	}
+	if len(stateStochastic.TurnHistory) != 5 {
+		t.Errorf("expected 5 turns, got %d", len(stateStochastic.TurnHistory))
+	}
+}

@@ -2,12 +2,22 @@ package engine
 
 import (
 	"fmt"
+	"math/rand"
 	"time"
 
 	"github.com/arthurgray2k/The_Stars_Like_Dust/internal/comm"
 	"github.com/arthurgray2k/The_Stars_Like_Dust/internal/persona"
 	"github.com/arthurgray2k/The_Stars_Like_Dust/internal/storage"
 )
+
+// SimulationOptions defines runtime controls for stance, temperature stochasticity, and seeding.
+type SimulationOptions struct {
+	POV         string  `json:"pov"`
+	Stance      string  `json:"stance"`      // balanced, aggressive, covert, diplomatic, inquisitive
+	Temperature float64 `json:"temperature"` // 0.0 = deterministic; >0.0 = stochastic sampling
+	Seed        int64   `json:"seed"`        // 0 = auto-generate time seed
+	SessionID   string  `json:"session_id"`
+}
 
 // Engine orchestrates episodic narrative execution.
 type Engine struct {
@@ -61,24 +71,47 @@ func (e *Engine) SyncMetadataToDatabase() error {
 	return nil
 }
 
-// RunEpisode executes an episodic, bounded simulation from the chosen character POV.
+// RunEpisode executes an episodic simulation with default balanced deterministic settings.
 func (e *Engine) RunEpisode(pov string, sessionID string) (*GameState, error) {
+	return e.RunEpisodeWithOptions(SimulationOptions{
+		POV:         pov,
+		Stance:      "balanced",
+		Temperature: 0.0,
+		Seed:        1,
+		SessionID:   sessionID,
+	})
+}
+
+// RunEpisodeWithOptions executes simulation applying tactical stance and temperature stochasticity.
+func (e *Engine) RunEpisodeWithOptions(opts SimulationOptions) (*GameState, error) {
 	if err := e.SyncMetadataToDatabase(); err != nil {
 		return nil, err
 	}
 
+	pov := opts.POV
 	povPersona, ok := e.PersonaMgr.Get(pov)
 	if !ok {
-		// Fallback to Biron Farrill if unknown POV passed
 		pov = "biron_farrill"
 		povPersona, _ = e.PersonaMgr.Get(pov)
 	}
 
+	sessionID := opts.SessionID
 	if sessionID == "" {
-		sessionID = fmt.Sprintf("session-%s-%d", pov, time.Now().Unix())
+		sessionID = fmt.Sprintf("session-%s-%d", pov, time.Now().UnixNano())
 	}
 
-	episodeTitle := fmt.Sprintf("The Stars, Like Dust: Vantage of %s", povPersona.Name)
+	stance := opts.Stance
+	if stance == "" {
+		stance = "balanced"
+	}
+
+	seed := opts.Seed
+	if seed == 0 {
+		seed = time.Now().UnixNano()
+	}
+	rnd := rand.New(rand.NewSource(seed))
+
+	episodeTitle := fmt.Sprintf("The Stars, Like Dust: Vantage of %s [%s Stance]", povPersona.Name, stance)
 	if err := e.Store.CreateSession(sessionID, pov, episodeTitle); err != nil {
 		return nil, fmt.Errorf("failed creating session: %w", err)
 	}
@@ -88,9 +121,13 @@ func (e *Engine) RunEpisode(pov string, sessionID string) (*GameState, error) {
 		SessionID:      sessionID,
 		POVCharacterID: pov,
 		EpisodeTitle:   episodeTitle,
+		Stance:         stance,
+		Temperature:    opts.Temperature,
+		Seed:           seed,
 		MaxTurns:       len(scenes),
 		Location:       "Starting Orbit",
 		ActiveShip:     "The Remembrance",
+		EndingBranch:   "Canonical Proclamation of the Free Federation",
 		Characters:     make(map[string]*persona.Persona),
 		TurnHistory:    make([]TurnResult, 0, len(scenes)),
 	}
@@ -99,7 +136,6 @@ func (e *Engine) RunEpisode(pov string, sessionID string) (*GameState, error) {
 		state.Characters[p.ID] = p
 	}
 
-	// Load dispatches for reference
 	dispatches, _ := e.CommMgr.LoadAll()
 	state.Dispatches = dispatches
 
@@ -113,13 +149,32 @@ func (e *Engine) RunEpisode(pov string, sessionID string) (*GameState, error) {
 			actor = povPersona
 		}
 
-		// Record candidate evaluations into temporary decision table
+		// Dynamic consequence adjustments:
+		contextDescription := scene.Description
+		if scene.Index == 3 && state.HostileCourtTriggered {
+			contextDescription = "Due to the explosive confrontation in the Rhodian court, armed sentries patrol Hangar 9 with alert scanners trained on all avenues of approach."
+		}
+
+		// Log candidate actions to temporary decision table
 		for _, cand := range scene.Options {
 			_ = e.Store.RecordTempEvaluation(sessionID, turnIndex, cand.Description, 50.0, cand.TacticalType)
 		}
 
-		// Evaluate and select optimal action based on persona
-		eval := actor.EvaluateChoice(scene.Description, scene.Options)
+		// Evaluate choice with stance and temperature
+		evalCfg := persona.EvaluationConfig{
+			Stance:      stance,
+			Temperature: opts.Temperature,
+			Rnd:         rnd,
+		}
+		eval := actor.EvaluateChoiceWithConfig(contextDescription, scene.Options, evalCfg)
+
+		// Check for stateful branching flags
+		if eval.ChosenAction.ID == "biron_demand_hinrik" {
+			state.HostileCourtTriggered = true
+		}
+		if eval.ChosenAction.ID == "biron_fire_blasters" || eval.ChosenAction.ID == "jonti_feign_innocence" {
+			state.BlastersEngaged = true
+		}
 
 		// Record chosen turn into permanent database table
 		turnRec := storage.TurnRecord{
@@ -129,13 +184,12 @@ func (e *Engine) RunEpisode(pov string, sessionID string) (*GameState, error) {
 			Location:     scene.Location,
 			ActionChosen: eval.ChosenAction.Description,
 			Dialogue:     eval.ChosenAction.DialoguePrompt,
-			Outcome:      fmt.Sprintf("%s successfully resolved scene '%s'", actor.Name, scene.Title),
+			Outcome:      fmt.Sprintf("%s resolved scene '%s' (Choice: %s)", actor.Name, scene.Title, eval.ChosenAction.ID),
 		}
 		if err := e.Store.RecordTurn(turnRec); err != nil {
 			return nil, fmt.Errorf("failed recording turn %d: %w", turnIndex, err)
 		}
 
-		// Purge ephemeral decision evaluations to keep storage lean
 		_ = e.Store.ClearTempEvaluations(sessionID)
 
 		result := TurnResult{
@@ -144,20 +198,30 @@ func (e *Engine) RunEpisode(pov string, sessionID string) (*GameState, error) {
 			ActorName:      actor.Name,
 			Location:       scene.Location,
 			Decision:       eval,
-			NarrativeEvent: scene.Description,
+			NarrativeEvent: contextDescription,
 			Dialogue:       eval.ChosenAction.DialoguePrompt,
 			Outcome:        turnRec.Outcome,
 		}
 		state.TurnHistory = append(state.TurnHistory, result)
 	}
 
-	// Finalize game session in database
-	finalOutcome := fmt.Sprintf("Episode successfully resolved through the decisive agency of %s across %d narrative turns.", povPersona.Name, len(scenes))
+	// Final outcome resolution based on dynamic branching
+	var finalOutcome string
+	if state.BlastersEngaged {
+		state.EndingBranch = "Aggressive Naval Clash & Ceasefire Compromise"
+		finalOutcome = fmt.Sprintf("Episode resolved after direct starship blaster fire. Although Remembrance engaged Aratap's capital cruiser, Aratap's historical rationality averted planetary obliteration, securing an armed truce.")
+	} else if stance == "covert" {
+		state.EndingBranch = "Covert Archival Exfiltration & Shadow Federation"
+		finalOutcome = fmt.Sprintf("Episode resolved through subterranean stealth. Hinrik's ancient constitutional parchment was secured before imperial censors could trace the archival leak.")
+	} else {
+		state.EndingBranch = "Canonical Proclamation of the Free Federation"
+		finalOutcome = fmt.Sprintf("Episode successfully resolved through the decisive agency of %s across %d narrative turns under %s stance.", povPersona.Name, len(scenes), stance)
+	}
+
 	if err := e.Store.CompleteSession(sessionID, finalOutcome); err != nil {
 		return nil, fmt.Errorf("failed completing session: %w", err)
 	}
 
-	// Ensure database remains compact and well under 500 MB
 	if err := e.Store.PruneAndVacuum(); err != nil {
 		return nil, fmt.Errorf("failed vacuuming database: %w", err)
 	}
