@@ -70,6 +70,8 @@ The_Stars_Like_Dust/
 ├── USAGE.md
 ├── ARCHITECTURE.md
 ├── WORKFLOW.md
+├── brief.md
+├── prospective.md
 └── LICENSE
 ```
 
@@ -77,6 +79,8 @@ The_Stars_Like_Dust/
 
 ## Documentation
 
+- **[brief.md](brief.md)**: Literary synopsis of Asimov's novel, timeline, political factions, and thematic analysis.
+- **[prospective.md](prospective.md)**: Software design perspective, engineering philosophy, multi-POV agency, and capacity control.
 - **[USAGE.md](USAGE.md)**: CLI flags, character POV listing, execution examples, and output modes.
 - **[ARCHITECTURE.md](ARCHITECTURE.md)**: Detailed system architecture, component diagrams, state machine, and data flow.
 - **[WORKFLOW.md](WORKFLOW.md)**: Development lifecycle, Plane project synchronization, adding characters/dispatches, and verification rules.
