@@ -68,8 +68,18 @@ The_Stars_Like_Dust/
 ├── Makefile
 ├── README.md
 ├── USAGE.md
+├── ARCHITECTURE.md
+├── WORKFLOW.md
 └── LICENSE
 ```
+
+---
+
+## Documentation
+
+- **[USAGE.md](USAGE.md)**: CLI flags, character POV listing, execution examples, and output modes.
+- **[ARCHITECTURE.md](ARCHITECTURE.md)**: Detailed system architecture, component diagrams, state machine, and data flow.
+- **[WORKFLOW.md](WORKFLOW.md)**: Development lifecycle, Plane project synchronization, adding characters/dispatches, and verification rules.
 
 ---
 
